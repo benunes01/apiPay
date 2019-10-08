@@ -31,5 +31,5 @@
 <br>
 <li><b>express:</b> micro-framework simples e flexível</li>
 <br>
-<li><h4>Agora vamos criar a pasta 'src' na raiz do projeto. Onde ficará os códigos da nossa aplicação.</h4></li>
-<li><h4>Inciailmente, dentro da pasta 'src' teremos os arquivos: 'server.js' , 'app.js' , 'routes.js'.</h4></li>
+<h4>Agora vamos criar a pasta 'src' na raiz do projeto. Onde ficará os códigos da nossa aplicação.</h4>
+<h4>Inciailmente, dentro da pasta 'src' teremos os arquivos: 'server.js' , 'app.js' , 'routes.js'.</h4>
