@@ -1,4 +1,4 @@
-<h1>Como fazer uma API</h1>
+<h1>Como fazer uma API em Node</h1>
 <h3>Passo a passo:</h3>
 
 <h2>Pré requisitos</h2>
