@@ -45,7 +45,7 @@
 <br>
 <li><b>nodemon: </b>Basicamente ele é um file watcher que roda internamente o próprio comando node, sempre que atualizarmos o código, não precisamos reiniciar o servidor, o nodemon faz isso automaticamente.</li>
 <br>
-<li><b>sucrase: </b>Ele é uma alternativa mais rápida ao babel. É um trasnpilador que nos possibilita a usar os novos padrões do javaScript, como ES6.</li>
+<li><b>sucrase: </b>Ele é uma alternativa mais rápida ao babel. É um transpilador que nos possibilita a usar os novos padrões do javaScript, como ES6.</li>
 <br>
 <h4>Vamos configurar o projeto para que possamos usar o sucrase e nodemon de forma correta:</h4>
 <br>
