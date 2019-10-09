@@ -148,4 +148,112 @@ app.listen(3000);
     <br>
     Indo no navegador e colocando  'localhost:3000', deverá aparecer em json {'message: 'hello'} .
 </h4>
+<br>
+<h3>Com ele rodando perfeitamente, vamos adicionar mais algumas dependências que vai nos ajudar pelo resto da criação.</h3>
 
+```yarn add eslint prettier eslint-config-prettier eslint-plugin-prettier babel-eslint```
+
+<p>Obs: lembre-se de que além da instalação via NPM ou Yarn, é necessário acessar a "marketplace" do seu editor de código, no caso do VSCode, WebStorm, Sublame Text e outros, e instalar o plugin do ESLint e do Prettier para o editor de código ou IDE que
+    está sendo utilizada. Consulte as instruções do seu editor/IDE para verificar como instalar plugins.</p>
+
+<br>
+
+<ul>
+    <li>eslint: utilizado para análise de código estático e identificação de padrões problemáticos encontrados no código JavaScript.</li>
+    <li> babel-eslint: aumenta a compatibilidade entre o ES6 (ECMAScript 6 — que é uma especificação da linguagem JavaScript) e o Eslint. Lembrando que o sucrase é bom apenas em ambiente de desenvolvimento.</li>
+    <li>prettier: formata o código de modo a manter um padrão em todo o projeto, os plugins `eslint-config-prettier` e `eslint-plugin-prettier` cuidam de fazer a integração entre o ESLint e o Prettier, de modo a promover correções automáticas no código sempre
+        que o ESLint apontar uma quebra de padrão/erro, obviamente você pode incluir regras personalizadas ou ignorar as predefinidas que não atenderem ao seu interesse.</li>
+</ul>
+
+<h5>Feito isso, vamos configurar o ESLint</h5>
+
+```yarn eslint --init```
+
+<br>
+
+<h5>Abaixo são as opções de configuração, ai estão as respostas que eu considero para o questionário, você pode selecionar utilizando as setas para cima ou para baixo e pressionando enter.</h5>
+
+<h4>Opção 1: define como o ESLint irá funcionar, verificando a sintaxe, rastreando problemas e forçando a aderência ao estilo.</h4>
+
+```To chek syntax, find problems, and enforce code style```
+
+<h4>Define como será feito o import/export de módulos.</h4>
+
+```JavaScript mudles (import/export)```
+
+<h4>Qual framwork estamos utilizando.</h4>
+
+```None of these```
+
+<h4>Define que o código irá rodar sobre o Node, ou seja, no back-end.</h4>
+<br>
+<p>Desmarca o 'Browser com a tecla 'ESPAÇO'</p>
+
+```Node```
+
+<h4>Define que utilizaremos um guia de estilos popular.</h4>
+
+```Use a popular style guide```
+
+<h4>define o Airbnb como style guide padrão do projeto.</h4>
+
+```Airbnb```
+
+<h4>Especifica que o arquivo de configurações do ESLint seguirá o formado JSON.</h4>
+
+```JSON```
+
+<br>
+
+<h5>Escreva Y e aperte Enter</h5>
+
+<br>
+
+<h5>Caso esteja utilizando YARN, exclua o arquivo `package-lock.json` e execute a instrução abaixo, do contrário ignore somente essa instrução:</h5>
+
+```yarn```
+
+<br>
+
+<h4>Edite o arquivo '.eslintrc.json' , ficando assim:</h4>
+
+```
+{
+    "env": {
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "airbnb-base",
+        "prettier"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "prettier"
+      ],
+    "rules": {
+        "prettier/prettier": "error",
+        "class-methods-use-this": "off",
+        "no-param-reassign": "off",
+        "camelcase": "off",
+        "no-unused-vars": ["error", { "argsIgnorePattern": "next" }]
+    }
+}
+```
+
+<h4>Crie o arquivo '.prettierrc e adicione este conteúdo nele:</h4>
+
+```
+{
+    "singleQuote": true,
+    "trailingComma": "es5"
+  }
+```
