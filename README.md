@@ -307,7 +307,7 @@ module.exports = {
 
 <br>
 
-<h5>Vamos usar o Postgree</h5>
+<h5>Vamos usar o Postgree para ser nosso banco de dados</h5>
 
 ```yarn add pg pg-hstore```
 
