@@ -257,3 +257,71 @@ app.listen(3000);
     "trailingComma": "es5"
   }
 ```
+<br>
+
+<h4>Agora para organizar ainda mais, vamos criar mais alguns arquivos e pastas.</h4>
+<br>
+<ul>
+    <li>Criar a pasta <b>config</b> dentro da pasta <b>src</b></li>
+    <li>Criar o arquivo <b>database.js</b> dentro da pasta <b>config</b></li>
+    <li>Criar a pasta <b>database</b> dentro da pasta <b>src</b></li>
+    <li>Criar uma pasta <b>migrations</b> dentro da pasta <b>database</b></li>
+    <li>Criar a pasta <b>app</b> dentro da pasta <b>src</b></li>
+    <li>Criar a pasta <b>controllers</b> e a pasta <b>models</b> dentro da pasta <b>app</b></li>
+</ul>
+
+<br>
+
+<h4>Agora vamos instalar o sequelize, que vai nos ajudar na criação do banco de dados.</h4>
+
+```yarn add sequelize```
+
+<br>
+
+<h5>E esse:</h5>
+
+<h5>Interface de linha de comando</h5>
+
+```yarn add sequelize-cli -D```
+
+<br>
+
+<h4>Depois de instalado, vamos criar um arquivo na raix do projeto chamado <b>.sequelizerc</b>, deixando na sintaxe de JavaScript.</h4>
+
+<br>
+
+<h4>O arquivo vai ficar assim:</h4>
+
+```
+const { resolve } = require('path');
+
+module.exports = {
+    config: resolve(_dirname, 'src', 'config', 'database'),
+    'models-path': resolve(_dirname, 'src', 'app', 'models'),
+    'migrations-path': resolve(_dirname, 'src', 'database', 'migrations'),
+    'seeders-path': resolve(_dirname, 'src', 'database', 'seeds'),
+}
+```
+
+<h4>Feito isso, vamos no <b>database.js</b> dentro da pasta <b>config</b> e exportar um arquivo de configuração.</h4>
+
+<br>
+
+<h5>Vamos usar o Postgree</h5>
+
+```yarn add pg pg-hstore```
+
+```
+module.exports = {
+    dialect: 'postgres',
+    host: 'localhost',
+    username: 'postgres',
+    password: '123',
+    database: 'becaptain',
+    define: {
+      timestamps: true,
+      underscored: true,
+      underscoredAll: true,
+    },
+  };
+  ```
