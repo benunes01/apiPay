@@ -175,11 +175,11 @@ app.listen(3000);
 
 <h4>Opção 1: define como o ESLint irá funcionar, verificando a sintaxe, rastreando problemas e forçando a aderência ao estilo.</h4>
 
-```To chek syntax, find problems, and enforce code style```
+```To check syntax, find problems, and enforce code style```
 
 <h4>Define como será feito o import/export de módulos.</h4>
 
-```JavaScript mudles (import/export)```
+```JavaScript modules (import/export)```
 
 <h4>Qual framwork estamos utilizando.</h4>
 
