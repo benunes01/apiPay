@@ -797,3 +797,128 @@ export default new SessionController();
 <br>
 
 <h4>Mais uma vez se você testar com Imsominia, ele funcionará tudo certo!</h4>
+
+<br>
+
+
+
+<h4>O que faremos agora é bloquear o acesso ao usuario a certos tipo de rota, caso ele não esteja logado.</h4>
+<br>
+<h4>Para isso criaremos o <b>Middleware</b></h4>
+
+<h5>Uma rota que não deve ser acessada sem o usuario estar logado é a <b>Update</b> por exemplo.</h5>
+
+<br>
+
+<h4>Vamos criar a pasta <b>middlewares</b> dentro da pasta <b>app</b></h4>
+<h4>E vamos criar um arquivo <b>auth.js</b> dentro da middlewares</h4>
+
+```
+import jwt from 'jsonwebtoken';
+import { promisify } from 'util';
+
+import authConfig from '../../config/auth';
+
+export default async (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        return res.status(401).json({ error: 'Token not provided' });
+    }
+
+    const [, token] = authHeader.split(' ');
+
+    try {
+    const decoded = await promisify(jwt.verify)(token, authConfig.secret);
+        //se chegou até aqui ele ta autenticado , então vai par ao proximo.
+    return next();
+    } catch(err) {
+        return res.status(401).json({ error: 'Token invalid' });
+    }
+};
+
+```
+
+<h4>E vamos criar a rota update, importar o auth e chama la em routes.js</h4>
+
+```
+//UserController.js
+
+import User from '../models/User';
+
+class UserController {
+    async store(req, res) {
+        const userExists = await User.findOne({ where: { email: req.body.email } });
+
+        if(userExists) {
+            return res.status(400).json({ error: 'User already exists.' });
+        }
+        // Para receber apenas uns parametros
+        const { id, name, email, provider } = await User.create(req.body);
+
+        return res.json({
+            id,
+            name,
+            email,
+            provider,
+        });
+    }
+
+    async update(req, res) {
+        const { email, oldPassword } = req.body;
+
+        const user = await User.findByPk(req.userId);
+
+        if (email !== user.email) {
+            const userExists = await User.findOne({ where: { email } });
+
+            if(userExists) {
+                return res.status(400).json({ error: 'User already exists.' });
+            }
+        }
+
+        if (oldPassword && !(await user.checkPassword(oldPassword))) {
+            return res.status(401).json ({ error: 'Password does not match' });
+        }
+
+        const { id, name, provider } = await user.update(req.body);
+
+        return res.json({
+            id,
+            name,
+            email,
+            provider,
+        });
+    }
+}
+
+export default new UserController();
+
+
+```
+
+<br>
+
+```
+//routes.js
+
+import { Router } from 'express';
+import UserController from './app/controllers/UserController';
+import SessionController from './app/constrollers/SessionController';
+import authMiddllware from  './app/middlewares/auth';
+
+const routes = new Router();
+
+routes.post('/Users', UserController.store);
+routes.post('/sessions', UserController.store);
+
+//Tudo que vier após esse routes.use sera verificado
+routes.use(authMiddleware);
+routes.put('./users', UserController.update);
+
+export default routes;
+
+```
+
+<h4>Você está de novo livre para testar.</h4>
+<h5>Precisa fazer um pouco mais de coisas no Imsominia ou no Postgree para testar.<h5
