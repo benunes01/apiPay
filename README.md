@@ -325,3 +325,81 @@ module.exports = {
     },
   };
   ```
+  
+  <br>
+
+<h4>Vamos fazer nossa primeira <b>Migration</b></h4>
+<br>
+<h5>Para facilitar vamos usar esse comando no terminal:</h5>
+
+```yarn sequelize migration:create --name-create-users ```
+<br>
+
+<h5>Com isso vai ter criado o arquivo dentro da pasta <b>Migrations</b></h5>
+
+<h5>Você pode tirar os exemplos e deixar apenas o return dentro do <b>Up</b> e do <b>Down</b></h5>
+
+<h5>Vamos definir os campos na nossa tabela, o arquivo deve ficar assim:</h5>
+
+```
+// ./config/database/migrations/"arquivo criado"
+
+up: (queryInterface, Sequelize) => {
+    return queryInterface.createTable('users', {
+        id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            autoincrement: true,
+            primaryKey: true,
+    },
+    name: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    password_hash: {
+        type: Sequelize.STRING,
+        allowNull: false,
+    },
+    provider: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+    },
+    created_at:{
+        type: Sequelize.DATE,
+        allowNull: false,
+    },
+    update_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+    }
+    });
+},
+
+down: queryInterface => {
+    return queryInterface.dropTable('users');
+},
+};
+```
+<h5>O <b>provide</b> é quando sua aplicação tem dois tipos de usuario, por exemplo: O cliente(false) e o Provedor(true).</h5>
+
+<br>
+
+<h4>Agora execute no terminal e o sequelize vai criar a tabela no banco de dados. </h4>
+
+```yarn  sequelize dbmigrate```
+
+<br>
+
+<h5>Você pode usar o <b>PostBird</b> para verificar</h5>
+
+<br>
+
+<h4>Caso você ve que cometeu algum erro e ainda não enviou para os outros desenvolvedores, você pode usar o comando para desfazer:</h4>
+
+```yarn sequelize db:migrate:undo```
