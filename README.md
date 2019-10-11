@@ -618,3 +618,182 @@ import bcrypt from 'bcryptjs';
 <br>
 
 <h5>Se você cadastrar um usuario pelo Imsominia e e depois olhar no PostBird, verá que a hash está criada!</h5>
+
+<br>
+
+<h4>Agora vamos usar o JWT(json web token) na parte de Login do usuário</h4>
+
+<br>
+
+<h5>O JWT é um jeito de autenticar muito usado nas API REST</h5>
+
+<br>
+
+<h4>Vamos instalar uma nova dependência que vai gerar nosso token.</h4>
+
+```yarn add jsonwebtoken```
+
+<br>
+
+<h4>Vamos criar o arquivo <b>SessionController.js</b> dentro da pasta <b>controllers</b></h4>
+<h5>Pois não vamos criar um usuario e sim uma sessão.</h5>
+
+
+```
+import User from '../models/User';
+import from jwt from 'jsonwebtoken';
+
+class SessionController {
+    async store(req, res) {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            return res.status(401).json({ error: 'User nof found' })
+        }
+        
+        if (!(await user.checkPassword(password))) {
+            return res.status(401.json({ error: 'Password does not match' }))
+        }
+        
+        const { id, name } = user;
+
+        return res.json({
+            user: {
+                id,
+                name,
+                email,
+            },
+            //Esse texto foi retirado de um site para gerar token, qeu deve ser unico.
+            token: jwt.sign({ id }, '41f08f2d2a4c99f65e86f91e965f5b4e', {
+                expiresIn: '7d',
+            }),
+        })
+    }
+}
+
+export default new SessionController();
+
+```
+
+<br>
+<h5>O site usado para gerar o texto hash foi o <a href="https://www.md5online.org"></a>MD5Online</h5>
+
+<br>
+<h4>E no arquivo <b>User.js</b> colocar assim:</h4>
+
+```
+import Sequelize, { Model } from 'sequelize'; 
+import bcrypt from 'bcryptjs';
+
+    class User extends Model {
+        static init(sequelize) {
+            super.init({
+                name: Sequelize.STRING,
+                email: Sequelize.STRING,
+                password: Sequelize.VIRTUAL, //Um campo que só vai existir aqui e nao no banco de dados
+                password_hash: Sequelize.STRING,
+                provider: Sequelize.BOOLEAN,
+            },
+            {
+                sequelize,
+            }
+            );
+            //Vai executar antes de salvar o usuario
+            this.addHook('beforeSave', async (user) => {
+                if (user.password) {
+                    user.password_hash = await bcrypt.hash(user.password, 8);
+                }
+            });
+            return this;
+        }
+        checkPassword(password) {
+            return bcrypt.compare(password, this.password_hash);
+        }
+    }
+
+    export default User;
+
+```
+
+<br>
+
+<h4>Agora vamos criar a rota em <b>Routes</b></h4>
+
+```
+import { Router } from 'express';
+import UserController from './app/controllers/UserController';
+import SessionController from './app/constrollers/SessionController';
+
+const routes = new Router();
+
+routes.post('/Users', UserController.store);
+routes.post('/sessions', UserController.store);
+
+export default routes;
+```
+<br>
+
+<h4>Mais uma vez você pode usar o Imsominia para testar o Login.</h4>
+
+<br>
+
+<h4>Para deixar o projeto mais organizado, vamos colocar o hash criado na SessionController.js em um arquivo separado.</h4>
+
+<br>
+
+<h4>Vamos criar o arquivo <b>auth.js</b> dentro da pasta <b>config</b></h4>
+
+```
+//auth.js
+
+export default {
+    secret: '41f08f2d2a4c99f65e86f91e965f5b4e',
+    expiresIn: '7d', 
+}
+```
+
+<h4>Já o <b>SessionController</b> ficará assim:</h4>
+
+```
+import User from '../models/User';
+import from jwt from 'jsonwebtoken';
+import authConfig from '../../config/auth';
+
+class SessionController {
+    async store(req, res) {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ where: { email } });
+
+        if (!user) {
+            return res.status(401).json({ error: 'User nof found' })
+        }
+        
+        if (!(await user.checkPassword(password))) {
+            return res.status(401.json({ error: 'Password does not match' }))
+        }
+        
+        const { id, name } = user;
+
+        return res.json({
+            user: {
+                id,
+                name,
+                email,
+            },
+            //Esse texto foi retirado de um site para gerar token, qeu deve ser unico.
+            token: jwt.sign({ id }, authConfig.secret, {
+                expiresIn: authConfig.expiresIn,
+            }),
+        })
+    }
+}
+
+export default new SessionController();
+```
+
+<br>
+
+<h4>Mais uma vez se você testar com Imsominia, ele funcionará tudo certo!</h4>
