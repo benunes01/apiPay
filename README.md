@@ -519,3 +519,51 @@ routes.get('/', (req, res) => res.json({ message: 'Hello' }));
 export default routes;
 
 ```
+<br>
+
+<h4>Agora vamos criar o arquivo <b>UserController</b> dentro da pasta <b>Controllers</b></h4>
+
+<h5>Ele deve ficar assim:</h5>
+
+```
+// UserController.js
+
+import User from '../models/User';
+
+class UserController {
+    async store(req, res) {
+        const userExists = await User.findOne({ where: { email: req.body.email } });
+
+        if(userExists) {
+            return res.status(400).json({ error: 'User already exists.' });
+        }
+
+        const user = await User.create(req.body);
+
+        return res.json(user);
+    }
+}
+
+export default new UserController();
+
+```
+
+<br>
+
+<h4>Com essa rota criada, devemos importar e criar ela também na <b>routes.js</b></h4>
+
+```
+import { Router } from 'express';
+
+import UserController from './app/controllers/UserController';
+
+const routes = new Router();
+
+routes.post('/Users', UserController.store);
+
+export default routes;
+```
+
+<h4>Com isso feito, você já pode testar o cadastro de usuario, eu recomendo você usar o <b>Imsominia</b> mas você pode usar o Postgree</h4>
+
+
