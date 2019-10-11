@@ -403,3 +403,119 @@ down: queryInterface => {
 <h4>Caso você ve que cometeu algum erro e ainda não enviou para os outros desenvolvedores, você pode usar o comando para desfazer:</h4>
 
 ```yarn sequelize db:migrate:undo```
+
+<br>
+
+<h4>Agora vamos criar o <b>model do usuario</b>, que vai ser usado para manipular os usuarios.</h4>
+<br>
+<h5>Crie o arquivo <b>User.js</b> dentro da pasta <b>models</b></h5>
+
+<br>
+<h5>O arquivo deve ficar assim:</h5>
+
+```
+import Sequelize, { Model } from 'sequelize'; 
+
+    class User extends Model {
+        static init(sequelize) {
+            super.init({
+                name: Sequelize.STRING,
+                email: Sequelize.STRING,
+                password_hash: Sequelize.STRING,
+                provider: Sequelize.BOOLEAN,
+            },
+            {
+                sequelize,
+            }
+            );
+        }
+    }
+
+    export default User;
+
+```
+
+<br>
+
+<h5>Agora com o model criado, precisamos carregar para ele ser usado na nossa aplicação</h5>
+
+<br>
+
+<h4>Dentro da pasta <b>database</b>, vamos criar o arquivo <b>index.js</b>, ele ficará assim: </h4>
+
+```
+import Sequelize from 'sequelize';
+
+import User from '../app/models/User';
+
+import databaseConfig from '../config/database';
+
+const models = [User];
+
+class database {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        this.connection = new Sequelize(databaseConfig);
+
+        models.map(model => model.init(this.connection));
+    }
+}
+
+export default new Database();
+
+```
+
+<br>
+
+<h4>Também devemos importar ele no arquivo <b>app.js</b> e no <b>User.js</b></h4>
+
+```
+//app.js
+
+import express from 'express';
+import routes from './routes';
+
+import './database';
+
+class App {
+  constructor() {
+    this.server = express();
+
+    this.middlewares();
+    this.routes();
+  }
+
+  middlewares() {
+    this.server.use(express.json());
+  }
+
+  routes() {
+    this.server.use(routes);
+  }
+}
+
+export default new App().server;
+
+```
+
+<br>
+
+<h5>Depois vamos tirar nossa logica do routes e colocar no controller, mas por enquanto vai ficar ali.</h5>
+
+```
+// route.js
+
+import { Router } from 'express';
+
+import User from './app/models/User';
+
+const routes = new Router();
+
+routes.get('/', (req, res) => res.json({ message: 'Hello' }));
+
+export default routes;
+
+```
