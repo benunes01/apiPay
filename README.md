@@ -571,4 +571,50 @@ export default routes;
 
 <h4>Com isso feito, você já pode testar o cadastro de usuario, eu recomendo você usar o <b>Imsominia</b> mas você pode usar o Postgree</h4>
 
+<br>
 
+<h4>Agora vamos gerar o hash da senha para criptografar o password, e para isso vamos instalar mais uma dependência.</h4>
+
+```
+yarn add bcrypt.js
+
+```
+
+<br>
+
+<h4>Agora vamos no <b>User.js</b> e importar o bcrypt e adicionar mais algumas coisas.</h4>
+
+```
+import Sequelize, { Model } from 'sequelize'; 
+import bcrypt from 'bcryptjs';
+
+    class User extends Model {
+        static init(sequelize) {
+            super.init({
+                name: Sequelize.STRING,
+                email: Sequelize.STRING,
+                password: Sequelize.VIRTUAL, //Um campo que só vai existir aqui e nao no banco de dados
+                password_hash: Sequelize.STRING,
+                provider: Sequelize.BOOLEAN,
+            },
+            {
+                sequelize,
+            }
+            );
+            //Vai executar antes de salvar o usuario
+            this.addHook('beforeSave', async (user) => {
+                if (user.password) {
+                    user.password_hash = await bcrypt.hash(user.password, 8);
+                }
+            });
+            return this;
+        }
+    }
+
+    export default User;
+
+```
+
+<br>
+
+<h5>Se você cadastrar um usuario pelo Imsominia e e depois olhar no PostBird, verá que a hash está criada!</h5>
