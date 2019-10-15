@@ -293,13 +293,13 @@ app.listen(3000);
 <h4>O arquivo vai ficar assim:</h4>
 
 ```
-const { resolve } = require('path');
+const path = require('path')
 
 module.exports = {
-    config: resolve(_dirname, 'src', 'config', 'database'),
-    'models-path': resolve(_dirname, 'src', 'app', 'models'),
-    'migrations-path': resolve(_dirname, 'src', 'database', 'migrations'),
-    'seeders-path': resolve(_dirname, 'src', 'database', 'seeds'),
+  config: path.resolve('src', 'config', 'database.js'),
+  'models-path': path.resolve('src', 'app', 'models'),
+  'seeders-path': path.resolve('src', 'database', 'seeders'),
+  'migrations-path': path.resolve('src', 'database', 'migrations')
 }
 ```
 
