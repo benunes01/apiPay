@@ -39,7 +39,7 @@
 
 <h4>Antes de continuar, devemos instalar mais duas dependências, a Nodemon e a sucrase:</h4>
 
-```yarn nodemon sucrase -D```
+```yarn add nodemon sucrase -D```
 <br>
 <p>Repare que usamos o <b>-D</b> , é para ele colocar no 'package.json' como uma dependência de desenvolvimento.</p>
 <br>
