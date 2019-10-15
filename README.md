@@ -332,7 +332,7 @@ module.exports = {
 <br>
 <h5>Para facilitar vamos usar esse comando no terminal:</h5>
 
-```yarn sequelize migration:create --name-create-users ```
+```yarn sequelize migration:create --name=create-users ```
 <br>
 
 <h5>Com isso vai ter criado o arquivo dentro da pasta <b>Migrations</b></h5>
